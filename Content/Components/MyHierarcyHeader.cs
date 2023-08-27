@@ -16,6 +16,7 @@ namespace MyHierarchy
         public Color backgroundColor = Color.gray;
         public Color fontColor = Color.white;
 
+        #if UNITY_EDITOR
         [MenuItem("GameObject/My Hierarychy/Header", false, 10)]
         public static void CreateHeader(MenuCommand menu)
         {
@@ -25,15 +26,13 @@ namespace MyHierarchy
             Undo.RegisterCreatedObjectUndo(go, "Created MyHierarchy GO: " + go.name);
             Selection.activeObject = go;
 
-            #if UNITY_EDITOR
             EditorApplication.RepaintHierarchyWindow();
-            #endif
         }
+        #endif
 
         void OnValidate() {
-            gameObject.tag = HierarchyRenderer.editorOnlyTag;
-
             #if UNITY_EDITOR
+            gameObject.tag = HierarchyRenderer.editorOnlyTag;
             EditorApplication.delayCall += ()=> {
 
                 if (this == null) 

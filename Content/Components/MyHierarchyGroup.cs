@@ -11,6 +11,7 @@ public class MyHierarchyGroup : MonoBehaviour
     public Color fontColor = Color.white;
     public Color backgroundColor = Color.gray;
 
+    #if UNITY_EDITOR
 	[MenuItem("GameObject/My Hierarychy/Group", false, 9)]
     public static void CreateHeaderGroup(MenuCommand menu)
     {
@@ -20,10 +21,10 @@ public class MyHierarchyGroup : MonoBehaviour
         Undo.RegisterCreatedObjectUndo(go, "Created MyHierarchy GO: " + go.name);
         Selection.activeObject = go;
 
-        #if UNITY_EDITOR
+
         EditorApplication.RepaintHierarchyWindow();
-        #endif
     }
+    #endif
 
     void OnValidate()
     {
