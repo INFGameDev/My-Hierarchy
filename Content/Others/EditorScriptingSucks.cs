@@ -67,34 +67,6 @@ using System;
 
             // =========================================================================================================
 
-            public Texture2D CreateTexture(Color color, Vector2Int size)
-            {
-                Texture2D texture = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false);
-                
-                for (int i = 0; i < texture.width; i++) {
-                    for (int j = 0; j < texture.height; j++) {
-                        texture.SetPixel(i,j, color);
-                    }
-                }
-
-                texture.Apply();
-                return texture;
-            }
-
-            public Texture2D CreateTexture_2x2(Color color)
-            {
-                Texture2D texture = new Texture2D(4, 4, TextureFormat.RGBA32, false);
-                
-                for (int i = 0; i < texture.width; i++) {
-                    for (int j = 0; j < texture.height; j++) {
-                        texture.SetPixel(i,j, color);
-                    }
-                }
-
-                texture.Apply();
-                return texture;
-            }
-
             public void CreateToggle(
                 bool condition, 
                 Color trueColor, 
@@ -126,6 +98,8 @@ using System;
 
                 ResetBackgroundColor();
             }
+
+            public static Vector3 GetLabelSize(string text, GUIStyle gs) => gs.CalcSize(new GUIContent(text));
         }
 
         public enum GroupDir
@@ -231,6 +205,48 @@ using System;
                 style.normal.textColor = color;
                 return style;
             }
+        }
+
+        public static class _
+        {
+            public static void Print(params float[] f)
+            {
+                string message = string.Empty;
+                for (int i = 0; i < f.Length; i++)
+                {
+                    message += f[i] + " | ";
+                }
+                Debug.Log(message);
+            }
+
+            public static Texture2D CreateTexture(Color color, Vector2Int size)
+            {
+                Texture2D texture = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false);
+                
+                for (int i = 0; i < texture.width; i++) {
+                    for (int j = 0; j < texture.height; j++) {
+                        texture.SetPixel(i,j, color);
+                    }
+                }
+
+                texture.Apply();
+                return texture;
+            }
+
+            public static Texture2D CreateTexture_2x2(Color color)
+            {
+                Texture2D texture = new Texture2D(4, 4, TextureFormat.RGBA32, false);
+                
+                for (int i = 0; i < texture.width; i++) {
+                    for (int j = 0; j < texture.height; j++) {
+                        texture.SetPixel(i,j, color);
+                    }
+                }
+
+                texture.Apply();
+                return texture;
+            }
+
         }
     }
 #endif

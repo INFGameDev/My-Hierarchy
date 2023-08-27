@@ -30,9 +30,12 @@ namespace MyHierarchy
         }
         #endif
 
-        void OnValidate() {
+        void OnValidate() 
+        {
+            gameObject.name = $"[Hierarchy Header] {m_name}";
+
             #if UNITY_EDITOR
-            gameObject.tag = HierarchyRenderer.editorOnlyTag;
+            gameObject.tag = HierarchyRenderer.EditorOnlyTag;
             EditorApplication.delayCall += ()=> {
 
                 if (this == null) 
@@ -56,22 +59,19 @@ namespace MyHierarchy
             gs.fontSize = 13;
             Color color = Color.yellow * 0.85f;
             gs.SetFontColor_AllStates(new Color(color.r, color.g, color.b, 1));
+            gs.SetBackground_AllStates(_.CreateTexture_2x2(new Color(0.25f, 0.25f, 0.25f, 1)));
 
             base.OnInspectorGUI();
             EditorGUILayout.Space(5);
 
-            
-            Rect rect = EditorGUILayout.BeginVertical();
+        
             EditorGUILayout.LabelField(
                 "WARNING!:\n - Do not parent another gameobject into this nor parent this to another" + 
                 "\n - Do not add any other component either" +
                 "\n - Don't reference this gameobject on anything" +
                 "\n\n [ This gameobject will be removed at builds ]"
                 , 
-                gs);
-            EditorGUILayout.EndVertical();
-            Flippin.FlippingINF(new Vector2(EditorGUIUtility.currentViewWidth / 2 + 50, rect.yMax + 15));
-            EditorGUILayout.Space(rect.height + 90);
+            gs);
         }
     }
 #endif

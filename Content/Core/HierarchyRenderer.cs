@@ -11,6 +11,7 @@ using System.Text;
 using System;
 #if UNITY_EDITOR
 using UnityEditor;
+using EditorScriptingRageAndFrustrationMitigator;
 #endif
 
 namespace MyHierarchy
@@ -42,40 +43,39 @@ namespace MyHierarchy
     [InitializeOnLoad]
     public static class HierarchyRenderer
     {
-        public const string editorOnlyTag = "EditorOnly";
-        private const int rightSidePadding = 15;
+        public const string EditorOnlyTag = "EditorOnly";
+        private const int HierarchyItemRectRightMargin = 15;
 
         /// <summary>
         /// how much the x position of the hierarchy's item rect shifts to the right side per depth  
         /// a level 1 depth means having 1 parent will shift the hierarchy's item rect X pos to this amount to the right
         /// </summary>
         private const int HierarchyItemXShiftPerDepth = 14;
-        private const int LayersLabelMaxLenght = 14;
         private const int SceneVisibilityAndPickabilityControlXMax = 32;
 
         /// <summary>
         /// The x position of the hierarchy item at the root level of hierarchy, further parented to other objects get's will make their x position shift to the right
         /// </summary>
-        private const int HierarchyItemRootXPos = 60;
-        private const int DepthNumberMargin = 12;
+        private const int HierarchyRootItemXMin = 60;
+        private const int DepthNumberMargin = 5;
         private const float ParentToChildLineXPosLeftShift = 22.5f;
-        private const float ParentToChildLineWidth = 2;
-        private const int ParentToChildVerticalLineLenght = 8;
+        private const float ParentToChildLineHeight = 2;
+        private const int ParentToChildVerticalLineWidth = 8;
         private const int ParentToChildVerticalLineYPosAddition = 7;
-        private const int DividerWidth = 1;
-        private const int Marker1Pos_StaticInActive = 90;
-        private const int Marker2Pos_InStaticActive = 189;
-        private const int Marker1Pos_StaticActive = 110;
-        private const int Marker2Pos_StaticActive = 210;
-        private const int DividerLeftPosShift = 5;
+        private const int DividerLineWidth = 1;
+        private const int DividerLineSpaceFromLabel = 5;
+        private static readonly Vector2 staticIndicatorSize = new Vector2(8, 8);
+        private const float LabelFixedWidth = 90;
         private static MyHierarchySettings settings;
 
         static HierarchyRenderer() => EditorApplication.hierarchyWindowItemOnGUI += OnGameObjectItemRender;
-
         static void OnGameObjectItemRender(int instanceID, Rect selectionRect)
         {
             if (settings == null)
                 settings = GetAsset_SO<MyHierarchySettings>("MyHierarchySettings", "My Hierarchy Settings");
+
+            if (!settings.activate)
+                return;
 
             GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
             if (go == null)
@@ -83,127 +83,172 @@ namespace MyHierarchy
 
             if (go.TryGetComponent<MyHierarcyHeader>(out MyHierarcyHeader header))
             {
-                DrawHeader(header, new Rect(selectionRect), go);
+                DrawHeader(header, selectionRect, go);
                 return;
             }
 
             if (go.TryGetComponent<MyHierarchyGroup>(out MyHierarchyGroup group))
-                DrawGroupHeader(new Rect(selectionRect), go, group);
+                DrawGroupHeader(selectionRect, go, group);
  
-            if (go.transform.parent != null)
-                DrawParentToChildLines(new Rect(selectionRect), go);
+            // draw only on gameobjects that is parented
+            if (selectionRect.xMin > HierarchyRootItemXMin)
+                DrawParentToChildLines(selectionRect, go);
 
-            DrawIsStatic(new Rect(selectionRect), go.isStatic);
-            DrawLayer(new Rect(selectionRect), go.layer);
-            DrawTag(new Rect(selectionRect), go.tag);
+            DrawIsStaticLabel(selectionRect, go.isStatic);
+            DrawLayerLabel(selectionRect, go.layer);
+            DrawTagLabel(selectionRect, go.tag);
+            // DrawRectXMax(selectionRect);
+            // DrawRectXMin(selectionRect);
+            // DrawRectYMin(selectionRect);
+            // DrawRectYMax(selectionRect);
         }
 
         private static void DrawParentToChildLines( Rect rect, GameObject go )
         {
-            DrawVerticalLine(new Rect(rect));
-            DrawHorizontalLine(new Rect(rect));
-            DrawDepth(new Rect(rect));
+            DrawVerticalLine(rect);
+            DrawHorizontalLine(rect, go.transform.childCount > 0);
+            DrawDepth(rect);
         }
 
         #region Header Draws ============================================================================================================================
         private static void DrawGroupHeader( Rect rect, GameObject go, MyHierarchyGroup groupHeader )
         {
-            GUIStyle gs = new GUIStyle(EditorStyles.label);
-            gs.normal.textColor = groupHeader.fontColor;
-            gs.fontStyle = settings.groupFontStyle;
+            GUIStyle groupLabelStyle = new GUIStyle(EditorStyles.label);
+            groupLabelStyle.normal.textColor = groupHeader.fontColor;
+            groupLabelStyle.fontStyle = settings.groupFontStyle;
 
-            rect.xMax = 
-                (rect.xMax - (Marker2Pos_StaticActive + DividerLeftPosShift + DividerWidth) ) + 
-                (( Convert.ToInt32( !settings.showLayers ) ) * Marker1Pos_StaticActive) + 
-                (( Convert.ToInt32( !settings.showTags ) ) * Marker1Pos_StaticActive) + 
-                (( Convert.ToInt32( !settings.showStaticObjects ) ) * 20 );
+            float dividerSpaceMultiplier = 0;
+            dividerSpaceMultiplier += Convert.ToInt32(settings.showLayers) * 2; // each label contains a space at each side
+            dividerSpaceMultiplier += Convert.ToInt32(settings.showStaticObjects) * 2;
+            dividerSpaceMultiplier += Convert.ToInt32(settings.showTags) * 2;
+
+            float labelWdithMultiplier = 0;
+            labelWdithMultiplier += Convert.ToInt32(settings.showLayers); // each label contains a space at each side
+            labelWdithMultiplier += Convert.ToInt32(settings.showTags);
+
+            Rect allLabelsRect = rect;
+            allLabelsRect.xMin = rect.xMax - (LabelFixedWidth * labelWdithMultiplier) - // x pos
+            (settings.showStaticObjects ? staticIndicatorSize.x : 0) - (DividerLineSpaceFromLabel * dividerSpaceMultiplier); // -> indicator width;
+            allLabelsRect.size = new Vector2(LabelFixedWidth, allLabelsRect.size.y);
+            rect.xMax = allLabelsRect.xMin;
 
             EditorGUI.DrawRect(rect, groupHeader.backgroundColor);
-            EditorGUI.LabelField(rect, " " + go.name, gs);
+            EditorGUI.LabelField(rect, " " + go.name, groupLabelStyle);
         }
 
         private static void DrawHeader(MyHierarcyHeader header, Rect rect, GameObject go)
         {
-            GUIStyle style = new GUIStyle(EditorStyles.label);
-            style.normal.textColor = header.fontColor;
-            style.alignment = settings.headerAlignment.ToTextAnchor();
-            style.fontStyle = settings.headerFontStyle;
+            GUIStyle headerStyle = new GUIStyle(EditorStyles.label);
+            headerStyle.normal.textColor = header.fontColor;
+            headerStyle.alignment = settings.headerAlignment.ToTextAnchor();
+            headerStyle.fontStyle = settings.headerFontStyle;
 
-            rect.size = new Vector2(rect.size.x + rightSidePadding, rect.size.y);
             rect.xMin = SceneVisibilityAndPickabilityControlXMax;
-            
+            rect.xMax = rect.xMax + HierarchyItemRectRightMargin;
 
             if (go.transform.childCount > 0 || go.transform.parent != null)
             {
                 EditorGUI.DrawRect(rect, Color.red);
-                style.fontStyle = FontStyle.Bold;
-                style.normal.textColor = Color.white;
+                headerStyle.fontStyle = FontStyle.Bold;
+                headerStyle.normal.textColor = Color.white;
                
                 if (go.transform.childCount > 0)  {
-                    EditorGUI.LabelField(rect, "Headers shouldn't have child gameobjects".ToUpper() , style);
+                    EditorGUI.LabelField(rect, "Headers shouldn't have child gameobjects".ToUpper() , headerStyle);
                     Debug.LogError($"My Hierarychy Header's shouldn't have child gameobjects!, Unparent all gameobjects from ({header.m_name})");
                 } else {
-                    EditorGUI.LabelField(rect, "Headers shouldn't be parented".ToUpper() , style);
+                    EditorGUI.LabelField(rect, "Headers shouldn't be parented".ToUpper() , headerStyle);
                     Debug.LogError($"My Hierarychy Header's shouldn't parented to other gameobject, Unparent from ({header.m_name})");
                 }
             } else {
                 EditorGUI.DrawRect(rect, header.backgroundColor);
-                EditorGUI.LabelField(rect, string.Format(" {0} ", header.m_name), style);                
+                EditorGUI.LabelField(rect, string.Format(" {0} ", header.m_name), headerStyle);                
             }
         }
         #endregion Header Draws ============================================================================================================================
 
         #region Visibility Controlled Properties =============================================================================================================
-        private static void DrawIsStatic(Rect rect, bool isStatic) 
+    
+        // private static void DrawRectXMin(Rect rect)
+        // {
+        //     Rect newRect = rect;
+        //     newRect.size = new Vector2(1, newRect.size.y);
+        //     newRect.x = rect.xMin;
+        //     EditorGUI.DrawRect(newRect, Color.gray);
+        // }
+
+        // private static void DrawRectXMax(Rect rect)
+        // {
+        //     Rect newRect = rect;
+        //     newRect.size = new Vector2(1, newRect.size.y);
+        //     newRect.x = rect.xMax - 1f;
+        //     EditorGUI.DrawRect(newRect, Color.gray);
+        // }
+
+        // private static void DrawRectYMin(Rect rect)
+        // {
+        //     Rect newRect = rect;
+        //     newRect.size = new Vector2(rect.width, 1);
+        //     newRect.y = rect.yMin;
+        //     EditorGUI.DrawRect(newRect, Color.gray);            
+        // }
+
+        // private static void DrawRectYMax(Rect rect)
+        // {
+        //     Rect newRect = rect;
+        //     newRect.size = new Vector2(rect.width, 1);
+        //     newRect.y = rect.yMax - 1;
+        //     EditorGUI.DrawRect(newRect, Color.gray);            
+        // }
+
+        private static void DrawIsStaticLabel(Rect rect, bool isStatic) 
         {   
             if (!settings.showStaticObjects)
                 return;
 
-            rect.x = rect.xMax - 10;
-            rect.y = rect.y + 4;
-            DrawDivider(new Rect(rect), rect.x - DividerLeftPosShift);
-            rect.size = new Vector2(8, 8);
-            EditorGUI.DrawRect(rect, isStatic ? new Color(0.4f, 0.4f, 0.4f, 1) : new Color(0, 0.75f, 0, 1));
+            Rect indicatorRect = rect;
+
+            indicatorRect.xMin = rect.xMax - staticIndicatorSize.x - DividerLineSpaceFromLabel; // x pos
+            indicatorRect.yMin = rect.yMin +  ( (rect.yMax - rect.yMin) / 4 ); // y pos
+            indicatorRect.size = staticIndicatorSize;
+
+            EditorGUI.DrawRect(indicatorRect, isStatic ? new Color(0.4f, 0.4f, 0.4f, 1) : new Color(0, 0.75f, 0, 1));
+
+            DrawLineDivider(indicatorRect.x, rect);
         }
+
         
-        private static void DrawLayer(Rect rect, LayerMask layer)
+        private static void DrawLayerLabel(Rect rect, LayerMask layer)
         {
             if (!settings.showLayers)
                 return;
 
             string layerString = LayerMask.LayerToName(layer);
-            rect.x = rect.xMax - (settings.showStaticObjects ? Marker1Pos_StaticActive : Marker1Pos_StaticInActive);
-            DrawDivider(new Rect(rect), rect.x - DividerLeftPosShift);
-            int stringMaxLenght = layerString.Length <= LayersLabelMaxLenght ? layerString.Length : LayersLabelMaxLenght;
-            EditorGUI.LabelField(rect, layerString.Substring(0, stringMaxLenght), new GUIStyle(EditorStyles.label));
+            Rect layerRect = rect;
+
+            layerRect.xMin = rect.xMax - LabelFixedWidth - // x pos
+            (settings.showStaticObjects ? staticIndicatorSize.x  : 0) - (DividerLineSpaceFromLabel * (settings.showStaticObjects ? 3 : 1)); // -> indicator width;
+            layerRect.size = new Vector2(LabelFixedWidth, layerRect.size.y);
+
+            EditorGUI.LabelField(layerRect, layerString, new GUIStyle(EditorStyles.label));
+            DrawLineDivider(layerRect.xMin, rect);
         }
 
-        private static void DrawTag(Rect rect, string tag)
+        private static void DrawTagLabel(Rect rect, string tag)
         {
             if (!settings.showTags)
                 return;
 
-            float shift = 0;
+            float dividerSpaceMultiplier = 1;
+            dividerSpaceMultiplier += Convert.ToInt32(settings.showLayers) * 2; // each label contains a space at each side
+            dividerSpaceMultiplier += Convert.ToInt32(settings.showStaticObjects) * 2;
 
-            if (settings.showLayers && settings.showTags){
-                if (settings.showStaticObjects) {
-                    shift = Marker2Pos_StaticActive;
-                } else {
-                    shift = Marker2Pos_InStaticActive;
-                } 
-            }
-            else{
-                if (settings.showStaticObjects) {
-                    shift = Marker1Pos_StaticActive;
-                } else {
-                    shift = Marker1Pos_StaticInActive;
-                } 
-            }
+            Rect tagRect = rect;
+            tagRect.xMin = rect.xMax - (LabelFixedWidth * (settings.showLayers ? 2 : 1)) - // x pos
+            (settings.showStaticObjects ? staticIndicatorSize.x : 0) - (DividerLineSpaceFromLabel * dividerSpaceMultiplier); // -> indicator width;
+            tagRect.size = new Vector2(LabelFixedWidth, tagRect.size.y);
 
-            rect.x = rect.xMax - shift;
-            DrawDivider(new Rect(rect), rect.x - DividerLeftPosShift);
-            int stringMaxLenght = tag.Length <= LayersLabelMaxLenght ? tag.Length : LayersLabelMaxLenght; 
-            EditorGUI.LabelField(rect, tag.Substring(0, stringMaxLenght), new GUIStyle(EditorStyles.label));
+            EditorGUI.LabelField(tagRect, tag, new GUIStyle(EditorStyles.label));
+            DrawLineDivider(tagRect.xMin, rect);
         }
 
         private static void DrawDepth(Rect rect) // draws the number on how deep the gameobject in the hierarchy 
@@ -211,39 +256,33 @@ namespace MyHierarchy
             if (!settings.showDepth)
                 return;
 
-            float xMinPosShift = rect.x - HierarchyItemRootXPos; 
-            float shiftCount = xMinPosShift / HierarchyItemXShiftPerDepth;
-            rect.x = SceneVisibilityAndPickabilityControlXMax + xMinPosShift - DepthNumberMargin;
+            float nameXRightPosShift = rect.xMin - HierarchyRootItemXMin; 
+            float shiftCount = nameXRightPosShift / HierarchyItemXShiftPerDepth;
+            rect.xMin = SceneVisibilityAndPickabilityControlXMax + DepthNumberMargin;
+            EditorGUI.LabelField(rect, shiftCount.ToString(), new GUIStyle(EditorStyles.boldLabel));
+        }
 
-            // only display the hierarchy depth of those gameobjects above 0
-            if (shiftCount > 0)
-                EditorGUI.LabelField(rect, shiftCount.ToString(), new GUIStyle(EditorStyles.boldLabel));
+        private static void DrawLineDivider(float labelXPos, Rect selectionRect)
+        {
+            EditorGUI.DrawRect(new Rect(labelXPos - DividerLineSpaceFromLabel, selectionRect.yMin, DividerLineWidth, selectionRect.size.y), Color.gray);
         }
         #endregion Visibility Controlled Properties =============================================================================================================
 
 
         #region Shape Draws =============================================================================================================
-
-        private static void DrawDivider(Rect rect, float xToLeftPosShift) // Draws the vertical line divers 
+        private static void DrawHorizontalLine(Rect rect, bool hasChild)
         {
-            rect.x = xToLeftPosShift;
-            rect.size = new Vector2(DividerWidth, rect.size.y);
-            EditorGUI.DrawRect(rect, Color.gray);
-        }
-
-        private static void DrawHorizontalLine(Rect rect)
-        {
-            rect.x -= ParentToChildLineXPosLeftShift;
-            rect.y += ParentToChildVerticalLineYPosAddition;
-            rect.size = new Vector2(ParentToChildVerticalLineLenght, ParentToChildLineWidth);
+            rect.xMin -= ParentToChildLineXPosLeftShift;
+            rect.yMin += ParentToChildVerticalLineYPosAddition;
+            rect.size = new Vector2(hasChild ? ParentToChildVerticalLineWidth : ParentToChildVerticalLineWidth * 2.5f, ParentToChildLineHeight);
             EditorGUI.DrawRect(rect, Color.gray);
         }
 
         private static void DrawVerticalLine(Rect rect)
         {
-            rect.x -= ParentToChildLineXPosLeftShift;
-            rect.size = new Vector2(ParentToChildLineWidth, rect.size.y - ParentToChildVerticalLineLenght);
-            EditorGUI.DrawRect(rect, Color.grey);
+            rect.xMin -= ParentToChildLineXPosLeftShift;
+            rect.size = new Vector2(ParentToChildLineHeight, rect.size.y - ParentToChildVerticalLineWidth);
+            EditorGUI.DrawRect(rect, Color.gray);
         }
         #endregion Shape Draws =============================================================================================================
 

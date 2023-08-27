@@ -18,6 +18,7 @@ namespace MyHierarchy
         [SerializeField, HideInInspector] public bool showTags;
         [SerializeField, HideInInspector] public bool showStaticObjects;
         [SerializeField, HideInInspector] public bool showDepth;
+        [SerializeField, HideInInspector] public bool activate;
 
         [Header("Header Controls:")]
         public FontStyle headerFontStyle = FontStyle.Bold;
@@ -33,7 +34,7 @@ namespace MyHierarchy
     public class MyHierarchySettingsEditor : Editor 
     {
         private ScriptingBandAid bandAid;
-        private readonly Color onColor = Color.yellow;
+        private readonly Color onColor = Color.green;
         private readonly Color offColor = Color.grey;
 
         private void OnEnable() => bandAid = new ScriptingBandAid();
@@ -53,50 +54,60 @@ namespace MyHierarchy
             using (new GroupConstraint(GroupDir.Vertical).GetRect(out allRect))
             {
                 using (new GroupConstraint(GroupDir.Horizontal))
-                    {
-                        bandAid.CreateToggle(
-                            settings.showLayers, 
-                            onColor, 
-                            offColor, 
-                            new GUIContent("Show Layers"), 
-                            ()=> settings.showLayers = !settings.showLayers,
-                            null,
-                            new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
-                        );
+                {
+                    bandAid.CreateToggle(
+                        settings.showLayers, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Layers"), 
+                        ()=> settings.showLayers = !settings.showLayers,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                    );
 
-                        bandAid.CreateToggle(
-                            settings.showTags, 
-                            onColor, 
-                            offColor, 
-                            new GUIContent("Show Tags"), 
-                            ()=> settings.showTags = !settings.showTags,
-                            null,
-                            new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
-                        ); 
-                    }
+                    bandAid.CreateToggle(
+                        settings.showTags, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Tags"), 
+                        ()=> settings.showTags = !settings.showTags,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                    ); 
+                }
 
-                    using (new GroupConstraint(GroupDir.Horizontal))
-                    {
-                        bandAid.CreateToggle(
-                            settings.showStaticObjects, 
-                            onColor, 
-                            offColor, 
-                            new GUIContent("Show Static Objects"), 
-                            ()=> settings.showStaticObjects = !settings.showStaticObjects,
-                            null,
-                            new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
-                        );
+                using (new GroupConstraint(GroupDir.Horizontal))
+                {
+                    bandAid.CreateToggle(
+                        settings.showStaticObjects, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Static Objects"), 
+                        ()=> settings.showStaticObjects = !settings.showStaticObjects,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                    );
 
-                        bandAid.CreateToggle(
-                            settings.showDepth, 
-                            onColor, 
-                            offColor, 
-                            new GUIContent("Show Depth"), 
-                            ()=> settings.showDepth = !settings.showDepth,
-                            null,
-                            new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
-                        );   
-                    }
+                    bandAid.CreateToggle(
+                        settings.showDepth, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Depth"), 
+                        ()=> settings.showDepth = !settings.showDepth,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                    );   
+                }
+
+                bandAid.CreateToggle(
+                    settings.activate, 
+                    onColor, 
+                    offColor, 
+                    new GUIContent("Activate "), 
+                    ()=> settings.activate = !settings.activate,
+                    null,
+                    new GUILayoutOption[] {GUILayout.Width(buttonWidth*2+4), GUILayout.Height(30)}
+                );  
             }
 
             Flippin.FlippingINF(new Vector2(180, allRect.yMax + 30));
