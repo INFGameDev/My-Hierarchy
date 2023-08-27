@@ -184,6 +184,23 @@ using System;
                         rect = EGL.BeginVertical();
                     }  
                 }
+
+                public GroupConstraint(GroupDir direction, out Rect r)
+                {
+                    if (direction == GroupDir.Horizontal){
+                        rect = EGL.BeginHorizontal();
+                        r = rect;
+                    } else {
+                        rect = EGL.BeginVertical();
+                        r = rect;
+                    }  
+                }
+
+                public IDisposable GetRect(out Rect r)
+                {
+                    r = rect;
+                    return (IDisposable)this;
+                }
             
 
                 public void Dispose()
