@@ -63,10 +63,10 @@ namespace MyHierarchy
         private const int ParentToChildVerticalLineLenght = 8;
         private const int ParentToChildVerticalLineYPosAddition = 7;
         private const int DividerWidth = 1;
-        private const int Marker1Pos_StaticInActive = 80;
-        private const int Marker2Pos_InStaticActive = 180;
-        private const int Marker1Pos_StaticActive = 100;
-        private const int Marker2Pos_StaticActive = 200;
+        private const int Marker1Pos_StaticInActive = 90;
+        private const int Marker2Pos_InStaticActive = 189;
+        private const int Marker1Pos_StaticActive = 110;
+        private const int Marker2Pos_StaticActive = 210;
         private const int DividerLeftPosShift = 5;
         private static MyHierarchySettings settings;
 
@@ -159,7 +159,7 @@ namespace MyHierarchy
             if (!settings.showStaticObjects)
                 return;
 
-            rect.x = rect.xMax;
+            rect.x = rect.xMax - 10;
             rect.y = rect.y + 4;
             DrawDivider(new Rect(rect), rect.x - DividerLeftPosShift);
             rect.size = new Vector2(8, 8);
