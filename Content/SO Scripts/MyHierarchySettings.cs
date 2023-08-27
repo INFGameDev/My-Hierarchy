@@ -94,10 +94,12 @@ namespace MyHierarchy
                     new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
                 );   
             }
+
+            Flippin.FlippingINF(new Vector2(180, 260));
     
             if (GUI.changed)
             {
-                EditorUtility.SetDirty(settings);
+                EditorUtility.SetDirty(settings); 
                 EditorApplication.RepaintHierarchyWindow();
             }
                 

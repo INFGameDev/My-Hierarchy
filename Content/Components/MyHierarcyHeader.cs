@@ -61,6 +61,8 @@ namespace MyHierarchy
             EditorGUILayout.Space(5);
 
             EditorGUILayout.LabelField("WARNING!: Do not parent another gameobject into this gameobject nor parent this to another since it will removed at builds.", gs);
+            EditorGUILayout.Space(85);
+            Flippin.FlippingINF(new Vector2(EditorGUIUtility.currentViewWidth / 2 + 50, 140));
         }
     }
 #endif
