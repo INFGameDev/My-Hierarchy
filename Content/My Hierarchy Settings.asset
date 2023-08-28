@@ -16,6 +16,7 @@ MonoBehaviour:
   showTags: 1
   showStaticObjects: 1
   showDepth: 1
+  activate: 1
   headerFontStyle: 1
   headerAlignment: 1
   groupFontStyle: 1

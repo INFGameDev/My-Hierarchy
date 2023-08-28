@@ -66,11 +66,15 @@ namespace MyHierarchy
         private const int DividerLineSpaceFromLabel = 5;
         private static readonly Vector2 staticIndicatorSize = new Vector2(8, 8);
         private const float LabelFixedWidth = 90;
+        private const float GameObjectHierarchyItemIconWidth = 15;
+        private const float IconToGroupHeaderLabelSpace = 3;
         private static MyHierarchySettings settings;
 
         static HierarchyRenderer() => EditorApplication.hierarchyWindowItemOnGUI += OnGameObjectItemRender;
         static void OnGameObjectItemRender(int instanceID, Rect selectionRect)
         {
+            bool isHeaderGroup = false;
+
             if (settings == null)
                 settings = GetAsset_SO<MyHierarchySettings>("MyHierarchySettings", "My Hierarchy Settings");
 
@@ -87,12 +91,18 @@ namespace MyHierarchy
                 return;
             }
 
-            if (go.TryGetComponent<MyHierarchyGroup>(out MyHierarchyGroup group))
+            if (go.TryGetComponent<MyHierarchyGroup>(out MyHierarchyGroup group)){
+                isHeaderGroup = true;
                 DrawGroupHeader(selectionRect, go, group);
+            }
+                
  
             // draw only on gameobjects that is parented
             if (selectionRect.xMin > HierarchyRootItemXMin)
                 DrawParentToChildLines(selectionRect, go);
+
+            if (isHeaderGroup && !settings.showLabelsOnGroup)
+                return;
 
             DrawIsStaticLabel(selectionRect, go.isStatic);
             DrawLayerLabel(selectionRect, go.layer);
@@ -130,10 +140,13 @@ namespace MyHierarchy
             allLabelsRect.xMin = rect.xMax - (LabelFixedWidth * labelWdithMultiplier) - // x pos
             (settings.showStaticObjects ? staticIndicatorSize.x : 0) - (DividerLineSpaceFromLabel * dividerSpaceMultiplier); // -> indicator width;
             allLabelsRect.size = new Vector2(LabelFixedWidth, allLabelsRect.size.y);
-            rect.xMax = allLabelsRect.xMin;
 
-            EditorGUI.DrawRect(rect, groupHeader.backgroundColor);
-            EditorGUI.LabelField(rect, " " + go.name, groupLabelStyle);
+            Rect headerRect = rect;
+            headerRect.xMax = settings.showLabelsOnGroup ? allLabelsRect.xMin : rect.xMax;
+            headerRect.xMin = rect.xMin + GameObjectHierarchyItemIconWidth + IconToGroupHeaderLabelSpace;
+
+            EditorGUI.DrawRect(headerRect, groupHeader.backgroundColor);
+            EditorGUI.LabelField(headerRect, " " + go.name, groupLabelStyle);
         }
 
         private static void DrawHeader(MyHierarcyHeader header, Rect rect, GameObject go)
@@ -154,14 +167,14 @@ namespace MyHierarchy
                
                 if (go.transform.childCount > 0)  {
                     EditorGUI.LabelField(rect, "Headers shouldn't have child gameobjects".ToUpper() , headerStyle);
-                    Debug.LogError($"My Hierarychy Header's shouldn't have child gameobjects!, Unparent all gameobjects from ({header.m_name})");
+                    Debug.LogError($"My Hierarychy Header's shouldn't have child gameobjects!, Unparent all gameobjects from ({go.name})");
                 } else {
                     EditorGUI.LabelField(rect, "Headers shouldn't be parented".ToUpper() , headerStyle);
-                    Debug.LogError($"My Hierarychy Header's shouldn't parented to other gameobject, Unparent from ({header.m_name})");
+                    Debug.LogError($"My Hierarychy Header's shouldn't parented to other gameobject, Unparent from ({go.name})");
                 }
             } else {
                 EditorGUI.DrawRect(rect, header.backgroundColor);
-                EditorGUI.LabelField(rect, string.Format(" {0} ", header.m_name), headerStyle);                
+                EditorGUI.LabelField(rect, string.Format(" {0} ", go.name), headerStyle);                
             }
         }
         #endregion Header Draws ============================================================================================================================

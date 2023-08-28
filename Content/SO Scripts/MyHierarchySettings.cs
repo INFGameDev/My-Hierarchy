@@ -19,6 +19,7 @@ namespace MyHierarchy
         [SerializeField, HideInInspector] public bool showStaticObjects;
         [SerializeField, HideInInspector] public bool showDepth;
         [SerializeField, HideInInspector] public bool activate;
+        [SerializeField, HideInInspector] public bool showLabelsOnGroup;
 
         [Header("Header Controls:")]
         public FontStyle headerFontStyle = FontStyle.Bold;
@@ -45,11 +46,16 @@ namespace MyHierarchy
             serializedObject.Update();
             bandAid.CacheDefaultColors();
             
-            float buttonWidth = bandAid.viewWidth / 2 - 17;
+            float buttonWidthx2 = bandAid.viewWidth / 2 - 17;
+            float buttonWidthx3 = bandAid.viewWidth / 3 - 12;
 
             EGL.Space(10);
-            EGL.LabelField("Visiblity:", new GUIStyle(EditorStyles.boldLabel));
+            var gs = new GUIStyle(EditorStyles.boldLabel);
+            gs.alignment = TextAnchor.MiddleCenter;
+            EGL.LabelField("VISIBILITY:", gs);
 
+            gs.alignment = TextAnchor.MiddleLeft;
+            EGL.LabelField("Non-Header:", gs);
             Rect allRect;
             using (new GroupConstraint(GroupDir.Vertical).GetRect(out allRect))
             {
@@ -59,20 +65,20 @@ namespace MyHierarchy
                         settings.showLayers, 
                         onColor, 
                         offColor, 
-                        new GUIContent("Show Layers"), 
+                        new GUIContent("Show Layer"), 
                         ()=> settings.showLayers = !settings.showLayers,
                         null,
-                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
                     );
 
                     bandAid.CreateToggle(
                         settings.showTags, 
                         onColor, 
                         offColor, 
-                        new GUIContent("Show Tags"), 
+                        new GUIContent("Show Tag"), 
                         ()=> settings.showTags = !settings.showTags,
                         null,
-                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
                     ); 
                 }
 
@@ -82,10 +88,10 @@ namespace MyHierarchy
                         settings.showStaticObjects, 
                         onColor, 
                         offColor, 
-                        new GUIContent("Show Static Objects"), 
+                        new GUIContent("Show Is Static"), 
                         ()=> settings.showStaticObjects = !settings.showStaticObjects,
                         null,
-                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
                     );
 
                     bandAid.CreateToggle(
@@ -95,19 +101,38 @@ namespace MyHierarchy
                         new GUIContent("Show Depth"), 
                         ()=> settings.showDepth = !settings.showDepth,
                         null,
-                        new GUILayoutOption[] {GUILayout.Width(buttonWidth), GUILayout.Height(30)}
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
                     );   
+                }  
+
+                EGL.Space(10);
+                EGL.LabelField("Group Header", gs);
+
+                using (new GroupConstraint(GroupDir.Horizontal))
+                {
+                    bandAid.CreateToggle(
+                        settings.showLabelsOnGroup,
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Group Header Labels"), 
+                        ()=> settings.showLabelsOnGroup = !settings.showLabelsOnGroup,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2*2+4), GUILayout.Height(30)}
+                    ); 
                 }
+
+                EGL.Space(20);
+                EGL.LabelField("All", gs);
 
                 bandAid.CreateToggle(
                     settings.activate, 
                     onColor, 
                     offColor, 
-                    new GUIContent("Activate "), 
+                    new GUIContent("Toggle Activation"), 
                     ()=> settings.activate = !settings.activate,
                     null,
-                    new GUILayoutOption[] {GUILayout.Width(buttonWidth*2+4), GUILayout.Height(30)}
-                );  
+                    new GUILayoutOption[] {GUILayout.Width(buttonWidthx2*2+4), GUILayout.Height(30)}
+                );
             }
 
             Flippin.FlippingINF(new Vector2(180, allRect.yMax + 30));

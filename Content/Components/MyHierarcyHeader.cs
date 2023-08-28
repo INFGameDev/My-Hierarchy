@@ -12,9 +12,8 @@ namespace MyHierarchy
     [System.Serializable]
     public class MyHierarcyHeader : MonoBehaviour
     {
-        public string m_name = "My Header";
-        public Color backgroundColor = Color.gray;
         public Color fontColor = Color.white;
+        public Color backgroundColor = Color.gray;
 
         #if UNITY_EDITOR
         [MenuItem("GameObject/My Hierarychy/Header", false, 10)]
@@ -32,7 +31,7 @@ namespace MyHierarchy
 
         void OnValidate() 
         {
-            gameObject.name = $"[Hierarchy Header] {m_name}";
+            // gameObject.name = $"[Hierarchy Header] {m_name}";
 
             #if UNITY_EDITOR
             gameObject.tag = HierarchyRenderer.EditorOnlyTag;
