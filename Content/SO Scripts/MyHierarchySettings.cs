@@ -1,7 +1,12 @@
+// Copyright (C) 2023 INF
+
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 #if UNITY_EDITOR
     using UnityEditor;
     using EGL = UnityEditor.EditorGUILayout;
@@ -20,6 +25,11 @@ namespace MyHierarchy
         [SerializeField, HideInInspector] public bool showDepth;
         [SerializeField, HideInInspector] public bool activate;
         [SerializeField, HideInInspector] public bool showLabelsOnGroup;
+        [SerializeField, HideInInspector] public bool showRelationshipLines;
+        [SerializeField, HideInInspector] public bool highlightSelectedSiblings;
+        [SerializeField, HideInInspector] public bool highlightSelectedChildren;
+        [SerializeField, HideInInspector] public bool showComponents;
+        [SerializeField, HideInInspector] public bool hideIconlessComponents;
 
         [Header("Header Controls:")]
         public FontStyle headerFontStyle = FontStyle.Bold;
@@ -54,8 +64,10 @@ namespace MyHierarchy
             gs.alignment = TextAnchor.MiddleCenter;
             EGL.LabelField("VISIBILITY:", gs);
 
+            // ====================================================================================================================
+
             gs.alignment = TextAnchor.MiddleLeft;
-            EGL.LabelField("Non-Header:", gs);
+            EGL.LabelField("Labels:", gs);
             Rect allRect;
             using (new GroupConstraint(GroupDir.Vertical).GetRect(out allRect))
             {
@@ -105,6 +117,71 @@ namespace MyHierarchy
                     );   
                 }  
 
+                using (new GroupConstraint(GroupDir.Horizontal))
+                {
+                    bandAid.CreateToggle(
+                        settings.showComponents, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Components"), 
+                        ()=> settings.showComponents = !settings.showComponents,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
+                    );
+
+                    bandAid.CreateToggle(
+                        settings.hideIconlessComponents, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Hide Iconless Components"), 
+                        ()=> settings.hideIconlessComponents = !settings.hideIconlessComponents,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
+                    );   
+                }
+
+                // ====================================================================================================================
+                EGL.Space(10);
+                EGL.LabelField("Object Relationship Lines", gs);
+
+                using (new GroupConstraint(GroupDir.Horizontal))
+                {
+                    bandAid.CreateToggle(
+                        settings.highlightSelectedSiblings, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Highlight Selected's Siblings"), 
+                        ()=> settings.highlightSelectedSiblings = !settings.highlightSelectedSiblings,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
+                    );
+
+                    bandAid.CreateToggle(
+                        settings.highlightSelectedChildren, 
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Highlight Selected's Children"), 
+                        ()=> settings.highlightSelectedChildren = !settings.highlightSelectedChildren,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2), GUILayout.Height(30)}
+                    );   
+                } 
+
+                using (new GroupConstraint(GroupDir.Horizontal))
+                {
+                    bandAid.CreateToggle(
+                        settings.showRelationshipLines,
+                        onColor, 
+                        offColor, 
+                        new GUIContent("Show Object Relationship"), 
+                        ()=> settings.showRelationshipLines = !settings.showRelationshipLines,
+                        null,
+                        new GUILayoutOption[] {GUILayout.Width(buttonWidthx2*2+4), GUILayout.Height(30)}
+                    ); 
+                }
+    
+                // ====================================================================================================================
+
                 EGL.Space(10);
                 EGL.LabelField("Group Header", gs);
 
@@ -121,6 +198,8 @@ namespace MyHierarchy
                     ); 
                 }
 
+                // ====================================================================================================================
+
                 EGL.Space(20);
                 EGL.LabelField("All", gs);
 
@@ -135,7 +214,11 @@ namespace MyHierarchy
                 );
             }
 
+            // ====================================================================================================================
+            EGL.Space(100);
             Flippin.FlippingINF(new Vector2(180, allRect.yMax + 30));
+
+            // ====================================================================================================================
     
             if (GUI.changed)
             {

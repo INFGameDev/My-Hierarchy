@@ -18,6 +18,9 @@ MonoBehaviour:
   showDepth: 1
   activate: 1
   showLabelsOnGroup: 1
+  showRelationshipLines: 1
+  highlightSelectedSiblings: 1
+  highlightSelectedChildren: 1
   headerFontStyle: 1
   headerAlignment: 1
   groupFontStyle: 1

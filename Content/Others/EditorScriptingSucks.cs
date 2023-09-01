@@ -209,7 +209,7 @@ using System;
 
         public static class _
         {
-            public static void Print(params float[] f)
+            public static void Print(params object[] f)
             {
                 string message = string.Empty;
                 for (int i = 0; i < f.Length; i++)
