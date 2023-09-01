@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
-using EditorScriptingRageAndFrustrationMitigator;
 #endif
 
 namespace MyHierarchy
@@ -19,6 +18,7 @@ namespace MyHierarchy
     {
         public Color fontColor = Color.white;
         public Color backgroundColor = Color.gray;
+        private const string EditorOnlyTag = "EditorOnly";
 
         #if UNITY_EDITOR
         [MenuItem("GameObject/My Hierarychy/Header", false, 10)]
@@ -36,7 +36,7 @@ namespace MyHierarchy
         void OnValidate() 
         {
             #if UNITY_EDITOR
-            gameObject.tag = HierarchyRenderer.EditorOnlyTag;
+            gameObject.tag = EditorOnlyTag;
             EditorApplication.delayCall += ()=> {
 
                 if (this == null) 
@@ -59,8 +59,8 @@ namespace MyHierarchy
             gs.alignment = TextAnchor.MiddleCenter;
             gs.fontSize = 13;
             Color color = Color.yellow * 0.85f;
-            gs.SetFontColor_AllStates(new Color(color.r, color.g, color.b, 1));
-            gs.SetBackground_AllStates(_.CreateTexture_2x2(new Color(0.25f, 0.25f, 0.25f, 1)));
+            SetFontColor_AllStates(gs, new Color(color.r, color.g, color.b, 1));
+            SetBackground_AllStates(gs, CreateTexture_2x2(new Color(0.25f, 0.25f, 0.25f, 1)));
 
             base.OnInspectorGUI();
             EditorGUILayout.Space(5);
@@ -77,6 +77,36 @@ namespace MyHierarchy
             EditorGUILayout.Space(5);
 
             EditorGUILayout.LabelField("Created By: (╯°□°)╯︵ INF", EditorStyles.boldLabel);
+        }
+
+        public GUIStyle SetBackground_AllStates(GUIStyle style, Texture2D texture)
+        {
+            style.active.background = texture;
+            style.hover.background = texture;
+            style.normal.background = texture;
+            return style;
+        }
+
+        public GUIStyle SetFontColor_AllStates(GUIStyle style, Color color)
+        {
+            style.active.textColor = color;
+            style.hover.textColor = color;
+            style.normal.textColor = color;
+            return style;
+        }
+
+        public Texture2D CreateTexture_2x2(Color color)
+        {
+            Texture2D texture = new Texture2D(4, 4, TextureFormat.RGBA32, false);
+            
+            for (int i = 0; i < texture.width; i++) {
+                for (int j = 0; j < texture.height; j++) {
+                    texture.SetPixel(i,j, color);
+                }
+            }
+
+            texture.Apply();
+            return texture;
         }
     }
 #endif

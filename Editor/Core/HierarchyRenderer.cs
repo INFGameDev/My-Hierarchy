@@ -42,7 +42,6 @@ namespace MyHierarchy
     [InitializeOnLoad]
     public static class HierarchyRenderer
     {
-        public const string EditorOnlyTag = "EditorOnly";
         private const int HierarchyItemRectRightMargin = 15;
 
         /// <summary>

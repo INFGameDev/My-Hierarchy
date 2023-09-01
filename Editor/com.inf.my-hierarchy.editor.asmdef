@@ -1,0 +1,18 @@
+{
+    "name": "com.inf.my-hierarchy.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:acf8c9d850a3cf34d93b95eb0cb24c46"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

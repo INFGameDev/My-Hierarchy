@@ -21,6 +21,8 @@ MonoBehaviour:
   showRelationshipLines: 1
   highlightSelectedSiblings: 1
   highlightSelectedChildren: 1
+  showComponents: 1
+  hideIconlessComponents: 1
   headerFontStyle: 1
   headerAlignment: 1
   groupFontStyle: 1

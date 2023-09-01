@@ -1,0 +1,18 @@
+{
+  "name": "com.inf.my-hierarchy",
+  "version": "1.5.1",
+  "displayName": "My Hierarchy",
+  "description": "Upgraded Hierarchy Window",
+  "documentationUrl": "https://i-n-f.itch.io/my-hierarchy",
+  "licensesUrl": "https://www.mozilla.org/en-US/MPL/2.0/",
+  "keywords": [
+    "tool",
+    "asset",
+    "editor",
+    "hierarchy"
+  ],
+  "author": {
+    "name": "inf",
+    "url": "https://i-n-f.itch.io/"
+  }
+}
