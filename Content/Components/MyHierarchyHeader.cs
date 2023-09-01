@@ -15,7 +15,7 @@ using EditorScriptingRageAndFrustrationMitigator;
 namespace MyHierarchy
 {
     [System.Serializable]
-    public class MyHierarcyHeader : MonoBehaviour
+    public class MyHierarchyHeader : MonoBehaviour
     {
         public Color fontColor = Color.white;
         public Color backgroundColor = Color.gray;
@@ -25,7 +25,7 @@ namespace MyHierarchy
         public static void CreateHeader(MenuCommand menu)
         {
             GameObject go = new GameObject();
-            go.AddComponent<MyHierarcyHeader>();
+            go.AddComponent<MyHierarchyHeader>();
             GameObjectUtility.SetParentAndAlign(go, menu.context as GameObject);
             Undo.RegisterCreatedObjectUndo(go, "Created MyHierarchy GO: " + go.name);
             Selection.activeObject = go;
@@ -49,7 +49,7 @@ namespace MyHierarchy
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(MyHierarcyHeader)), CanEditMultipleObjects]
+    [CustomEditor(typeof(MyHierarchyHeader)), CanEditMultipleObjects]
     public class MyHierarcyHeaderEditor : Editor
     {
         public override void OnInspectorGUI()

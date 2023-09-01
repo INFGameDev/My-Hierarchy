@@ -134,7 +134,7 @@ namespace MyHierarchy
             if (go.transform.parent != null)
                 HasNextSibling = go.transform.GetSiblingIndex() != go.transform.parent.childCount-1;
 
-            if (go.TryGetComponent<MyHierarcyHeader>(out MyHierarcyHeader header))
+            if (go.TryGetComponent<MyHierarchyHeader>(out MyHierarchyHeader header))
             {
                 DrawHeader(header, selectionRect, go.transform);
                 return;
@@ -218,7 +218,7 @@ namespace MyHierarchy
             EditorGUI.LabelField(headerRect, " " + goName, groupLabelStyle);
         }
 
-        private static void DrawHeader(MyHierarcyHeader header, Rect rect, Transform goTransform)
+        private static void DrawHeader(MyHierarchyHeader header, Rect rect, Transform goTransform)
         {
             GUIStyle headerStyle = new GUIStyle(EditorStyles.label);
             headerStyle.normal.textColor = header.fontColor;
