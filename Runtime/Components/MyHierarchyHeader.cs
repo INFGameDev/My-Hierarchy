@@ -21,7 +21,7 @@ namespace MyHierarchy
         private const string EditorOnlyTag = "EditorOnly";
 
         #if UNITY_EDITOR
-        [MenuItem("GameObject/My Hierarychy/Header", false, 10)]
+        [MenuItem("GameObject/My Hierarchy/Header", false, 10)]
         public static void CreateHeader(MenuCommand menu)
         {
             GameObject go = new GameObject();

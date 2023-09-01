@@ -18,7 +18,7 @@ public class MyHierarchyGroup : MonoBehaviour
     public Color backgroundColor = Color.gray;
 
     #if UNITY_EDITOR
-	[MenuItem("GameObject/My Hierarychy/Group", false, 9)]
+	[MenuItem("GameObject/My Hierarchy/Group", false, 9)]
     public static void CreateHeaderGroup(MenuCommand menu)
     {
         GameObject go = new GameObject();
