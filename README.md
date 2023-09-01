@@ -14,3 +14,4 @@
 
 <h4 align="left">- Download Instructions -</h4>
 <p align="left">To get the asset, you can either download an official release package from the releases page from that you can simply just extract it's contents and copy paste it to your project's asset folder.</p>
+<p align="left">You can also now add the git url in the package manager to import the asset</p>
