@@ -1,15 +1,9 @@
-<h1 align="center">My Hierarchy</h1>
-<h3 align="center">Upgraded Unity Hierarchy - Detailed & Organized</h2>
+# My Hierarchy
+Upgraded Unity Hierarchy Window
+ 
+![My Hierarchy parts](https://github.com/INFGameDev/My-Hierarchy/assets/61481229/bae26d28-3d72-48a3-8498-635cfc154fee)
 
-<hr>
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/61481229/264955363-bae26d28-3d72-48a3-8498-635cfc154fee.png" >
-</p>
-<hr>
-
-
-<p align="center"><b>(╯°□°）╯︵ [ If you liked my asset, Star my repo or follow my itch.io profile ]</b></p>
-<p align="center">Documentation: https://i-n-f.itch.io/my-hierarchy</p>
+**(╯°□°）╯︵ [ If you liked my asset, Star my repo or follow my itch.io profile ]**
 
 
 <h4 align="left">- Download Instructions -</h4>
