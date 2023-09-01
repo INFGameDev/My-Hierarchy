@@ -1,5 +1,5 @@
 # My Hierarchy
-
+Upgraded Hiearchy Window: A More informative and Organized Hierarchy
  
 ![My Hierarchy parts](https://github.com/INFGameDev/My-Hierarchy/assets/61481229/bae26d28-3d72-48a3-8498-635cfc154fee)
 
