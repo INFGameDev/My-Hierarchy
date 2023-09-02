@@ -12,9 +12,11 @@
 <p align="center">Documentation: https://i-n-f.itch.io/my-hierarchy</p>
 
 
-<h4 align="left">- Download Instructions -</h4>
-<p align="left">To get the asset, you can either download an official release package from the releases page from that you can simply just extract it's contents and copy paste it to your project's asset folder.</p>
-<p align="left">You can also now add the git url in the package manager to import the asset</p>
+<h4 align="left">INSTALL INSTRUCTIONS:</h4>
+<p align="left">You can either download this asset as an archive (through the releases or the repo itself) extract the contents and paste that into your project's asset folder. 
+    <br> OR
+    <br> (Recommended) Install it as package through unity's package manager using the git URL of this repo (Add as a package from a git URL).
+</p>
 
 <br>
 
