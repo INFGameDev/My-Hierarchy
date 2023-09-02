@@ -18,4 +18,4 @@
 
 <br>
 
-gimme your money **(╯°□°）╯︵** [![](https://github.com/INFGameDev/Project-ReadMe-Images/blob/master/Sponsor%20Button1.png)](http://paypal.me/RFactao)
+gimme your money **(╯°□°）╯︵** [![](https://github.com/INFGameDev/Project-ReadMe-Images/blob/master/Sponsor%20Button1.png)](http://paypal.me/RFactao) ᵖˡˢ
