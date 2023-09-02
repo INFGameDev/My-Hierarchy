@@ -30,7 +30,7 @@ namespace MyHierarchy
         private static void ShowWindow() {
             window = GetWindow<HierarchySettingsWindow>();
             window.titleContent = new GUIContent("Hierarchy Settings");
-            window.minSize = new Vector2( 450, 615 );
+            window.minSize = new Vector2( 450, 700 );
             window.maxSize = window.minSize;
             window.Show();
         }
@@ -54,9 +54,10 @@ namespace MyHierarchy
 
 
             GL.Space(10);
-            EGL.PropertyField(settingsSO.FindProperty("headerFontStyle"));
-            EGL.PropertyField(settingsSO.FindProperty("headerAlignment"));
-            EGL.PropertyField(settingsSO.FindProperty("groupFontStyle"));
+            EGL.PropertyField(settingsSO.FindProperty( nameof(settings.headerFontStyle) ));
+            EGL.PropertyField(settingsSO.FindProperty( nameof(settings.headerAlignment) ));
+            EGL.PropertyField(settingsSO.FindProperty( nameof(settings.groupFontStyle) ));
+            EGL.PropertyField(settingsSO.FindProperty( nameof(settings.labelWidth)  ));
 
 
             EGL.Space(10);

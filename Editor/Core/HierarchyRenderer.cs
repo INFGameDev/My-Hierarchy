@@ -62,9 +62,9 @@ namespace MyHierarchy
         private const float ParentToLastIndexChildLineLenghtMultiplier = 2.5f;
         private const int ParentToChildVerticalLineYPosAddition = 7;
         private const int DividerLineWidth = 1;
-        private const int DividerLineSpaceFromLabel = 5;
+        private const float DividerLineSpaceFromLabel = 4;
         private static readonly Vector2 staticIndicatorSize = new Vector2(8, 8);
-        private const float LabelFixedWidth = 90;
+        // private const float LabelFixedWidth = 60;
         private const float GameObjectHierarchyItemIconWidth = 15;
         private const float IconToGroupHeaderLabelSpace = 3;
         private static readonly Color ToGameobjectItemLineColor_Unselected = new Color(0.5f, 0.5f, 0.5f, 1);
@@ -197,9 +197,9 @@ namespace MyHierarchy
             labelWdithMultiplier += Convert.ToInt32(settings.showTags);
 
             Rect allLabelsRect = rect;
-            allLabelsRect.xMin = rect.xMax - (LabelFixedWidth * labelWdithMultiplier) - // x pos
+            allLabelsRect.xMin = rect.xMax - (settings.labelWidth * labelWdithMultiplier) - // x pos
             (settings.showStaticObjects ? staticIndicatorSize.x : 0) - (DividerLineSpaceFromLabel * dividerSpaceMultiplier); // -> indicator width;
-            allLabelsRect.size = new Vector2(LabelFixedWidth, allLabelsRect.size.y);
+            allLabelsRect.size = new Vector2(settings.labelWidth, allLabelsRect.size.y);
             return allLabelsRect.xMin;
         }
 
@@ -299,9 +299,9 @@ namespace MyHierarchy
             string layerString = LayerMask.LayerToName(layer);
             Rect layerRect = rect;
 
-            layerRect.xMin = rect.xMax - LabelFixedWidth - // x pos
+            layerRect.xMin = rect.xMax - settings.labelWidth - // x pos
             (settings.showStaticObjects ? staticIndicatorSize.x  : 0) - (DividerLineSpaceFromLabel * (settings.showStaticObjects ? 3 : 1)); // -> indicator width;
-            layerRect.size = new Vector2(LabelFixedWidth, layerRect.size.y);
+            layerRect.size = new Vector2(settings.labelWidth, layerRect.size.y);
 
             EditorGUI.LabelField(layerRect, layerString, new GUIStyle(EditorStyles.label));
             DrawLineDivider(layerRect.xMin, rect);
@@ -314,9 +314,9 @@ namespace MyHierarchy
             dividerSpaceMultiplier += Convert.ToInt32(settings.showStaticObjects) * 2;
 
             Rect tagRect = rect;
-            tagRect.xMin = rect.xMax - (LabelFixedWidth * (settings.showLayers ? 2 : 1)) - // x pos
+            tagRect.xMin = rect.xMax - (settings.labelWidth * (settings.showLayers ? 2 : 1)) - // x pos
             (settings.showStaticObjects ? staticIndicatorSize.x : 0) - (DividerLineSpaceFromLabel * dividerSpaceMultiplier); // -> indicator width;
-            tagRect.size = new Vector2(LabelFixedWidth, tagRect.size.y);
+            tagRect.size = new Vector2(settings.labelWidth, tagRect.size.y);
 
             EditorGUI.LabelField(tagRect, tag, new GUIStyle(EditorStyles.label));
             DrawLineDivider(tagRect.xMin, rect);

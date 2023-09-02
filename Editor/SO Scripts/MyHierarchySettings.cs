@@ -38,6 +38,10 @@ namespace MyHierarchy
 
         [Header("Group Header Controls:")]
         [SerializeField, HideInInspector] public FontStyle groupFontStyle = FontStyle.Bold; 
+
+
+        [Header("Label Controls:")]
+        [SerializeField, HideInInspector,Range(57,90)] public float labelWidth = 90;
     }
 
     // #if UNITY_EDITOR
