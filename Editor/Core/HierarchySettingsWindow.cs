@@ -45,7 +45,7 @@ namespace MyHierarchy
             if (settingsSO == null)
                 settingsSO = new SerializedObject(settings);
 
-
+            settingsSO.Update();
             bandAid.CacheDefaultColors();
             EditorGUI.BeginChangeCheck();
 

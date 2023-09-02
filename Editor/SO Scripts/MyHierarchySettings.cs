@@ -41,7 +41,7 @@ namespace MyHierarchy
 
 
         [Header("Label Controls:")]
-        [SerializeField, HideInInspector,Range(57,90)] public float labelWidth = 90;
+        [SerializeField, HideInInspector, Range(57,90)] public int labelWidth = 90;
     }
 
     // #if UNITY_EDITOR
