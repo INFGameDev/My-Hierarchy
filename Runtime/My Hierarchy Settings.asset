@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLayers: 1
   showTags: 1
-  showStaticObjects: 1
+  showStaticObjects: 0
   showDepth: 1
   activate: 1
   showLabelsOnGroup: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   headerFontStyle: 1
   headerAlignment: 1
   groupFontStyle: 1
+  labelWidth: 57
