@@ -1,6 +1,13 @@
 <h1 align="center">My Hierarchy</h1>
 <h3 align="center">Upgraded Unity Hierarchy - Detailed & Organized</h2>
 
+<br>
+
+<p align="center">
+<img src="https://github.com/INFGameDev/Project-ReadMe-Images/blob/master/INF%20Seamless%20Logo%20Gif%20160px.gif" >
+</p>
+<h4 align="center">Created By: INF</h4>
+
 <hr>
 <p align="center">
     <img src="https://user-images.githubusercontent.com/61481229/264955363-bae26d28-3d72-48a3-8498-635cfc154fee.png" >
@@ -18,6 +25,7 @@
     <br> (Recommended) Install it as package through unity's package manager using the git URL of this repo (Add as a package from a git URL).
 </p>
 
-<br>
 
-gimme your money **(╯°□°）╯︵** [![](https://github.com/INFGameDev/Project-ReadMe-Images/blob/master/Sponsor%20Button1.png)](http://paypal.me/RFactao) ᵖˡˢ
+
+
+
