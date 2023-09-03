@@ -359,6 +359,9 @@ namespace MyHierarchy
                     break;
 
                 Type componentType = components[i].GetType();
+                
+                if (componentType == null) 
+                    continue;
 
                 // Do not render transform or Rect Transform icons since we they are not that important to know
                 if (componentType == typeof(Transform) || componentType == typeof(RectTransform))
