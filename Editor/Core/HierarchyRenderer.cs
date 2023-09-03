@@ -358,14 +358,13 @@ namespace MyHierarchy
                 if (components.Length <= 1) // if there is one component in the object just don't render any icon we know it's either transform or rect transform
                     break;
 
-                if (components[i] == null)
+                if (components[i] == null) {
+                    Debug.LogWarning($"Missing/Invalid script found at Gameobject ({goTransform.name}), Skipped drawing it's icon");
                     continue;
+                }
 
                 Type componentType = components[i].GetType();
                 
-                if (componentType == null) 
-                    continue;
-
                 // Do not render transform or Rect Transform icons since we they are not that important to know
                 if (componentType == typeof(Transform) || componentType == typeof(RectTransform))
                     continue;
