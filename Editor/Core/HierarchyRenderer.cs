@@ -80,6 +80,7 @@ namespace MyHierarchy
         private static readonly Color NonStaticColor = new Color(0, 0.75f, 0, 1);
         private static readonly Color StaticColor = new Color(0.4f, 0.4f, 0.4f, 1);
         private static readonly Color ComponentIconBackgroundColor = new Color(0.3f, 0.3f, 0.3f, 1);
+        private static readonly Color inactiveObjectColorTint = new Color(0f, 0f, 0f, 0.3f);
 
         /// <summary>
         /// Checks if parent of the selected object is the parent of this game object thus checking this gameobject is a sibling of the current selected gameobject
@@ -141,7 +142,7 @@ namespace MyHierarchy
 
             if (go.TryGetComponent<MyHierarchyGroup>(out MyHierarchyGroup group)){
                 isHeaderGroup = true;
-                DrawGroupHeader(selectionRect, go.name, group);
+                DrawGroupHeader(selectionRect, go.name, group, go.activeSelf);
             }
                 
             // draw only on gameobjects that is parented
@@ -203,7 +204,7 @@ namespace MyHierarchy
             return allLabelsRect.xMin;
         }
 
-        private static void DrawGroupHeader( Rect rect, string goName, MyHierarchyGroup groupHeader )
+        private static void DrawGroupHeader( Rect rect, string goName, MyHierarchyGroup groupHeader, bool isActive )
         {
             GUIStyle groupLabelStyle = new GUIStyle(EditorStyles.label);
             groupLabelStyle.normal.textColor = groupHeader.fontColor;
@@ -213,8 +214,14 @@ namespace MyHierarchy
             headerRect.xMax = settings.showLabelsOnGroup ? GetAllLabelsXMin(rect) : rect.xMax;
             headerRect.xMin = rect.xMin + GameObjectHierarchyItemIconWidth + IconToGroupHeaderLabelSpace;
 
+
             EditorGUI.DrawRect(headerRect, groupHeader.backgroundColor);
-            EditorGUI.LabelField(headerRect, " " + goName, groupLabelStyle);
+            EditorGUI.LabelField(headerRect, goName, groupLabelStyle);
+
+            if (!isActive){
+                Rect inactiveRect = headerRect;
+                EditorGUI.DrawRect(inactiveRect, inactiveObjectColorTint);
+            }
         }
 
         private static void DrawHeader(MyHierarchyHeader header, Rect rect, Transform goTransform)
