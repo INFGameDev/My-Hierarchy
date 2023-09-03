@@ -358,6 +358,9 @@ namespace MyHierarchy
                 if (components.Length <= 1) // if there is one component in the object just don't render any icon we know it's either transform or rect transform
                     break;
 
+                if (components[i] == null)
+                    continue;
+
                 Type componentType = components[i].GetType();
                 
                 if (componentType == null) 
