@@ -33,19 +33,11 @@ namespace MyHierarchy
         }
         #endif
 
-        void OnValidate() 
-        {
-            #if UNITY_EDITOR
-            gameObject.tag = EditorOnlyTag;
-            EditorApplication.delayCall += ()=> {
+        private void OnDrawGizmosSelected() => gameObject.tag = EditorOnlyTag;
 
-                if (this == null) 
-                    return;
-
-                EditorApplication.RepaintHierarchyWindow();
-            };
-            #endif
-        }
+        #if UNITY_EDITOR
+        private void OnValidate() => EditorApplication.RepaintHierarchyWindow();
+        #endif
     }
 
 #if UNITY_EDITOR

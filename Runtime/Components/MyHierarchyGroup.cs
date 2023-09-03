@@ -26,24 +26,13 @@ public class MyHierarchyGroup : MonoBehaviour
         GameObjectUtility.SetParentAndAlign(go, menu.context as GameObject);
         Undo.RegisterCreatedObjectUndo(go, "Created MyHierarchy GO: " + go.name);
         Selection.activeObject = go;
-
-
         EditorApplication.RepaintHierarchyWindow();
     }
     #endif
 
-    void OnValidate()
-    {
-#if UNITY_EDITOR
-        EditorApplication.delayCall += () =>
-        {
-            if (this == null)
-                return;
-
-            EditorApplication.RepaintHierarchyWindow();
-        };
-#endif
-    }
+    #if UNITY_EDITOR
+    private void OnValidate() => EditorApplication.RepaintHierarchyWindow();
+    #endif
 }
 
 #if UNITY_EDITOR
